@@ -2,10 +2,7 @@ package com.wja.webstart.controller;
 
 import com.wja.webstart.model.Teacher;
 import com.wja.webstart.service.TeacherService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
@@ -19,8 +16,8 @@ public class TeacherController {
     }
 
     @GetMapping("/teachers")
-    public List<Teacher> getTeachersList(){
-        return teacherService.getTeachersList();
+    public List<Teacher> getTeachersList(@RequestParam(required = false) List<String> subjects){
+        return teacherService.getTeachersList(subjects);
     }
 
     @GetMapping("/teachers/{id}")

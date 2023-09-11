@@ -1,11 +1,13 @@
 package com.wja.webstart.service;
 
+import com.wja.webstart.exception.CourseNotFoundException;
 import com.wja.webstart.model.Course;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -40,15 +42,18 @@ public class CourseService {
         );
     }
 
-    public List<Course> getCourses(){
-        return courses;
+    public List<Course> getCourses(List<String> category){
+        return category != null ? courses.stream()
+                .filter(course -> category.contains(course.getCategory()))
+                .collect(Collectors.toList())
+                : courses;
     }
-
     public Course getCourse(Long id){
 
         return courses.stream()
                 .filter(course -> course.getId().equals(id))
                 .findFirst()
-                .orElse(new Course());
+                .orElseThrow(() ->
+                        new CourseNotFoundException(id));
     }
 }

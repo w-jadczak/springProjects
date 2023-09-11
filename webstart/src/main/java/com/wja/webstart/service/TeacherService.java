@@ -1,6 +1,5 @@
 package com.wja.webstart.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wja.webstart.model.Teacher;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
@@ -8,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 
 public class TeacherService {
@@ -40,8 +41,10 @@ public class TeacherService {
         );
     }
 
-    public List<Teacher> getTeachersList() {
-        return teachersList;
+    public List<Teacher> getTeachersList(List<String> subjects) {
+        return subjects != null ? teachersList.stream()
+                .filter(teacher -> teacher.getSubjects().stream().anyMatch(t -> subjects.contains(t)))
+                .collect(Collectors.toList()) : teachersList;
     }
 
     public Teacher getTeacher(Long id){
