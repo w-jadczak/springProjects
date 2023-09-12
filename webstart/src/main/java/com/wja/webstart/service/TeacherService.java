@@ -1,5 +1,7 @@
 package com.wja.webstart.service;
 
+import com.wja.webstart.exception.CourseNotFoundException;
+import com.wja.webstart.exception.NonDifferentTeacherException;
 import com.wja.webstart.model.Teacher;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
@@ -54,4 +56,28 @@ public class TeacherService {
                 .findFirst()
                 .orElse(new Teacher());
     }
+
+    public void createTeacher(Teacher teacher){
+        teachersList.add(teacher);
+    }
+
+    public void updateTeacher(Teacher teacherToUpdate){
+        Long id = teacherToUpdate.getId();
+
+        teachersList.stream()
+                .filter(teacher -> teacher.getId().equals(id))
+                .findAny()
+                .ifPresentOrElse(
+                        t ->  {if(t.compareTo(teacherToUpdate) != 0){
+                            t.setName(teacherToUpdate.getName());
+                            t.setSurname(teacherToUpdate.getSurname());
+                            t.setSubjects(teacherToUpdate.getSubjects());
+                        }else{
+                            throw new NonDifferentTeacherException(id);}
+                        },
+                        () -> {throw new CourseNotFoundException(id);}
+                );
+    }
+
+
 }

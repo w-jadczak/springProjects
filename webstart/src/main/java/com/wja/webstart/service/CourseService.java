@@ -56,4 +56,25 @@ public class CourseService {
                 .orElseThrow(() ->
                         new CourseNotFoundException(id));
     }
+
+    public void createCourse(Course course){
+        courses.add(course);
+    }
+
+    public void updateCourse(Course courseToUpdate){
+        Long id = courseToUpdate.getId();
+
+        courses.stream()
+                .filter(course -> course.getId().equals(id))
+                .findAny()
+                .ifPresentOrElse(
+                        c -> {
+                            c.setAuthor(courseToUpdate.getAuthor());
+                            c.setTitle(courseToUpdate.getTitle());
+                            c.setCategory(courseToUpdate.getCategory());
+                            c.setDescription(courseToUpdate.getDescription());
+                        },
+                        () -> {throw new CourseNotFoundException(id);}
+                );
+    }
 }

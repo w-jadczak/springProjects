@@ -2,6 +2,8 @@ package com.wja.webstart.controller;
 
 import com.wja.webstart.model.Course;
 import com.wja.webstart.service.CourseService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,5 +26,16 @@ public class CourseController {
     @GetMapping("/courses/{id}")
     public Course getCourse(@PathVariable("id") Long id){
         return courseService.getCourse(id);
+    }
+
+    @PostMapping("/courses")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createCourse(@RequestBody @Valid Course course){
+        courseService.createCourse(course);
+    }
+
+    @PutMapping("/courses")
+    public void updateCourse(@RequestBody Course course){
+        courseService.updateCourse(course);
     }
 }
