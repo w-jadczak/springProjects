@@ -1,9 +1,10 @@
 package com.wja.webstart.service;
 
-import com.wja.webstart.exception.CourseNotFoundException;
 import com.wja.webstart.exception.NonDifferentTeacherException;
+import com.wja.webstart.exception.TeacherNotFoundException;
 import com.wja.webstart.model.Teacher;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class TeacherService {
 
     private final List<Teacher> teachersList = new ArrayList<>();
 
+    @Value("${myapp.softdelete.enabled}")
+    private boolean softDeleteEnabled;
     @PostConstruct
 
     public void initTeachers(){
@@ -51,6 +54,9 @@ public class TeacherService {
 
     public Teacher getTeacher(Long id){
 
+        if(softDeleteEnabled){
+            throw new TeacherNotFoundException(id);
+        }
         return teachersList.stream()
                 .filter(teacher -> teacher.getId().equals(id))
                 .findFirst()
@@ -75,7 +81,20 @@ public class TeacherService {
                         }else{
                             throw new NonDifferentTeacherException(id);}
                         },
-                        () -> {throw new CourseNotFoundException(id);}
+                        () -> {throw new TeacherNotFoundException(id);}
+                );
+    }
+
+    public void deleteTeacher(Long id){
+        teachersList.stream()
+                .filter(teacher -> teacher.getId().equals(id))
+                .findAny()
+                .ifPresentOrElse(
+                        t -> {if(softDeleteEnabled){
+                            t.setDeleted(true);
+                        }else{
+                        teachersList.remove(t);}},
+                        () -> {throw new TeacherNotFoundException(id);}
                 );
     }
 

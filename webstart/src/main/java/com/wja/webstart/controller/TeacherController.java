@@ -37,4 +37,11 @@ public class TeacherController {
     public void updateTeacher(@RequestBody Teacher teacher){
         teacherService.updateTeacher(teacher);
     }
+
+    @DeleteMapping("/teachers")
+    public void deleteTeacher(@RequestParam Long id){
+        teacherService.deleteTeacher(id);
+    }
+
+
 }

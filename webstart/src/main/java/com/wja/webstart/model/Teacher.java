@@ -14,6 +14,7 @@ public class Teacher implements Comparable<Teacher>{
     private String surname;
     @NotNull(message = "Subjects list can not be empty")
     private List<String> subjects;
+    private Boolean deleted;
 
     public Teacher() {
     }
@@ -23,6 +24,7 @@ public class Teacher implements Comparable<Teacher>{
         this.name = name;
         this.surname = surname;
         this.subjects = subjects;
+        this.deleted = false;
     }
 
     @Override
@@ -64,5 +66,9 @@ public class Teacher implements Comparable<Teacher>{
 
     public void setSubjects(List<String> subjects) {
         this.subjects = subjects;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

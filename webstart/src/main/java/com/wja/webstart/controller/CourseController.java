@@ -38,4 +38,9 @@ public class CourseController {
     public void updateCourse(@RequestBody Course course){
         courseService.updateCourse(course);
     }
+
+    @DeleteMapping("/courses")
+    public void deleteCourse(@RequestParam Long id){
+        courseService.deleteCourse(id);
+    }
 }

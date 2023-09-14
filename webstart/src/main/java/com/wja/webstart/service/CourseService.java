@@ -77,4 +77,14 @@ public class CourseService {
                         () -> {throw new CourseNotFoundException(id);}
                 );
     }
+
+    public void deleteCourse(Long id){
+        courses.stream()
+                .filter(course -> course.getId().equals(id))
+                .findAny()
+                .ifPresentOrElse(
+                        courses::remove,
+                        () -> {throw new CourseNotFoundException(id);}
+                );
+    }
 }

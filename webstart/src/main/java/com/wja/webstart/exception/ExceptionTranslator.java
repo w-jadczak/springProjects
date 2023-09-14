@@ -23,6 +23,14 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     public String courseNotFoundHandler (CourseNotFoundException exception){
         return exception.getMessage();
     }
+
+    @ExceptionHandler(TeacherNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+
+    public String teacherNotFoundHandler (TeacherNotFoundException exception){
+        return exception.getMessage();
+    }
+
     @ExceptionHandler(NonDifferentTeacherException.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String nonDifferentTeacherHandler(NonDifferentTeacherException exception){
